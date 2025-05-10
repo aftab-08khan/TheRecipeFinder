@@ -1,0 +1,11 @@
+:root {
+  --color-primary: #ff6b6b; /* Tomato Red */
+  --color-secondary: #4caf50; /* Avocado Green */
+  --color-accent: #ffe66d; /* Lemon Yellow */
+  --color-bg: #fdfdfd; /* Milk White */
+  --color-card: #f1f1f1; /* Soft Gray */
+  --color-text: #333333; /* Charcoal Black */
+  --color-muted: #7a7a7a; /* Cool Gray */
+  --color-highlight: #ff9aa2; /* Coral Pink */
+  --color-dark-bg: #1e293b; /* Charcoal Navy */
+}
