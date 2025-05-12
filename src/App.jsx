@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Home from "./screens/Home";
 import ContentWrapper from "./components/ContentWrapper";
-import SingleCategories from "./components/SingleCategories";
+import SingleCategories from "./screens/SingleCategories";
 
 function App() {
   return (

@@ -22,7 +22,7 @@ const Categories = () => {
     fetchCategories();
   }, []);
   return (
-    <ul className="grid grid-cols-4 gap-6 mt-20">
+    <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {categoriesData?.length > 0 ? (
         categoriesData?.map((item, i) => {
           return (
@@ -36,7 +36,7 @@ const Categories = () => {
           );
         })
       ) : (
-        <CardsSkeleton />
+        <CardsSkeleton count={8} /> // Render 8 skeleton cards
       )}
     </ul>
   );
