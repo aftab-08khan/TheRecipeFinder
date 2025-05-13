@@ -5,14 +5,14 @@ import { CardsSkeleton } from "../components/Cards";
 import Header from "../components/Header";
 
 const SingleCategories = () => {
-  const { id } = useParams();
+  const { categoryId } = useParams();
   const [meals, setMeals] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchSingleCategories = async () => {
     try {
       const res = await fetch(
-        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${id}`
+        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryId}`
       );
       const data = await res.json();
       setMeals(data?.meals || []);
@@ -25,12 +25,14 @@ const SingleCategories = () => {
 
   useEffect(() => {
     fetchSingleCategories();
-  }, [id]);
+  }, [categoryId]);
 
   return (
-    <div className="p-4 min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
-      <Header id={id}>
-        <CustomButton path={"/"}>Back</CustomButton>
+    <div className="py-4  mx-auto min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+      <Header id={categoryId}>
+        <CustomButton on path={"/"}>
+          Back
+        </CustomButton>
       </Header>
 
       {loading ? (
@@ -40,12 +42,13 @@ const SingleCategories = () => {
           </div>
         </div>
       ) : meals?.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
+        <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-8">
           {meals?.length < 0 || meals == [] ? (
             <CardsSkeleton count={8} />
           ) : (
             meals?.map((meal) => (
-              <div
+              <Link
+                to={`/recipe/${meal?.strMeal}`}
                 key={meal?.idMeal}
                 className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white"
               >
@@ -70,11 +73,11 @@ const SingleCategories = () => {
                       {meal?.strArea || "International"}
                     </span>
                     <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">
-                      #{id}
+                      #{categoryId}
                     </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>

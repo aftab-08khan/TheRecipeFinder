@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Cards, CardsSkeleton } from "./Cards";
+import SearchInput from "./SearchInput";
 
 const Categories = () => {
   const [categoriesData, setCategoriesData] = useState(null);
+  const [filteredCategoriesData, setFilteredCategoriesData] = useState(null);
+
+  const [inputVal, setInputVal] = useState("");
   const fetchCategories = async () => {
     try {
       const res = await fetch(
@@ -14,31 +18,53 @@ const Categories = () => {
       );
 
       setCategoriesData(filterData);
+      setFilteredCategoriesData(filterData);
     } catch (error) {
       console.log(error, "Error");
     }
   };
+  const handleInput = (val) => {
+    setInputVal(val);
+
+    if (!val) {
+      setFilteredCategoriesData(categoriesData);
+      return;
+    }
+
+    const filtered = categoriesData?.filter((item) =>
+      item.strCategory.toLowerCase().includes(val.toLowerCase())
+    );
+    setFilteredCategoriesData(filtered);
+  };
+
   useEffect(() => {
     fetchCategories();
   }, []);
   return (
-    <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {categoriesData?.length > 0 ? (
-        categoriesData?.map((item, i) => {
-          return (
-            <Cards
-              link={item?.strCategory}
-              key={i}
-              title={item?.strCategory}
-              desc={item?.strCategoryDescription}
-              img={item?.strCategoryThumb}
-            />
-          );
-        })
-      ) : (
-        <CardsSkeleton count={8} /> // Render 8 skeleton cards
-      )}
-    </ul>
+    <div className="flex flex-col justify-center items-center">
+      <SearchInput
+        handleInput={handleInput}
+        value={inputVal}
+        placeHolder="Search for Category"
+      />
+      <ul className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+        {categoriesData?.length > 0 ? (
+          filteredCategoriesData?.map((item, i) => {
+            return (
+              <Cards
+                link={`category/${item?.strCategory}`}
+                key={i}
+                title={item?.strCategory}
+                desc={item?.strCategoryDescription}
+                img={item?.strCategoryThumb}
+              />
+            );
+          })
+        ) : (
+          <CardsSkeleton count={8} /> // Render 8 skeleton cards
+        )}
+      </ul>
+    </div>
   );
 };
 

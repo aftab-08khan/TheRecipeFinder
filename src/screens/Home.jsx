@@ -2,6 +2,8 @@ import React from "react";
 import Categories from "../components/Categories";
 import "../App.css";
 import CustomButton from "../components/CustomButton";
+import SearchInput from "../components/SearchInput";
+import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 p-8">
@@ -19,7 +21,6 @@ const Home = () => {
             brighten your day!
           </p>
 
-          {/* Action Buttons */}
           <div className="flex flex-wrap gap-4 mt-8 justify-center">
             {/* <a href="#todays-special">
               <button className="font-semibold px-6 py-3 rounded-full bg-amber-600 hover:bg-amber-700 text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex items-center gap-2">
@@ -39,7 +40,7 @@ const Home = () => {
               </button>
             </a> */}
             <CustomButton path={"/"}>Today's Special</CustomButton>
-            <a href="#search">
+            <Link to={"/search"}>
               <button className="font-semibold px-6 py-3 rounded-full bg-white hover:bg-gray-50 text-amber-800 border border-amber-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex items-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -55,16 +56,15 @@ const Home = () => {
                 </svg>
                 Search a Recipe
               </button>
-            </a>
+            </Link>
           </div>
         </div>
 
-        {/* Categories Section */}
         <div className="mt-12 md:mt-20">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-amber-900 mb-8 font-playfair">
             Browse by Category
           </h2>
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 py-8 flex flex-col justify-center">
             <Categories />
           </div>
         </div>
