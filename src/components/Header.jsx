@@ -16,15 +16,20 @@ const Header = ({ id, children }) => {
 
   return (
     <header
-      className={`sticky top-0 px-4 py-2 w-full z-50 transition-colors duration-300 ${
-        isScrolled && "bg-white shadow-md"
-      } ${isScrolled && "flex gap-4 items-center"}`}
+      className={`
+        sticky top-0 w-full z-50 px-4 flex flex-col items-baseline
+        transition-all duration-500 ease-in-out
+        ${isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-6"}
+      `}
     >
       {children}
+
       <h1
-        className={`text-4xl px-2 font-bold ${
-          isScrolled ? "mb-2" : "mb-10"
-        }  text-center text-amber-900 relative inline-block group`}
+        className={`
+           text-2xl md:text-3xl font-bold text-amber-900 text-center relative inline-block group
+          transition-all duration-500 ease-in-out
+          ${isScrolled ? "mb-2" : "mb-10"}
+        `}
       >
         <span className="capitalize">{id}</span> Meals
         <span className="absolute bottom-0 left-0 w-full h-1 bg-amber-400 transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>

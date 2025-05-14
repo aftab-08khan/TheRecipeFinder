@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CardsSkeleton = ({ count = 8 }) => {
   return (
@@ -24,14 +24,20 @@ const CardsSkeleton = ({ count = 8 }) => {
   );
 };
 
-const Cards = ({ title, desc, img, id, link }) => {
+const Cards = ({ title, desc, img, id, link, tag }) => {
+  const navigate = useNavigate();
+  console.log(link);
+  const handleNavigation = () => {
+    navigate(link, {
+      state: id,
+    });
+  };
   return (
-    <Link
-      to={link}
+    <div
+      onClick={handleNavigation}
       className="group relative rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 h-full flex flex-col"
       key={id}
     >
-      {/* Image with gradient overlay */}
       <div className="relative h-48 overflow-hidden">
         <img
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -42,14 +48,16 @@ const Cards = ({ title, desc, img, id, link }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
 
-      {/* Content */}
-      <div className="p-5 flex-grow flex flex-col">
+      <div className="p-5 flex-grow items-baseline flex flex-col">
         <h2 className="font-bold text-xl text-amber-900 mb-2 group-hover:text-amber-700 transition-colors duration-200 line-clamp-2">
           {title}
         </h2>
         <p className="text-amber-800 mt-2 line-clamp-3 flex-grow">{desc}</p>
-
-        {/* View Button (appears on hover) */}
+        {tag && (
+          <span className=" capitalize text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full ">
+            # {tag}
+          </span>
+        )}
         <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
             View Recipe
@@ -68,7 +76,7 @@ const Cards = ({ title, desc, img, id, link }) => {
           </span>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ import ContentWrapper from "./components/ContentWrapper";
 import SingleCategories from "./screens/SingleCategories";
 import SingleRecipe from "./screens/SingleRecipe";
 import Search from "./screens/Search";
+import SingleArea from "./screens/SingleArea";
 
 function App() {
   return (
@@ -17,7 +18,9 @@ function App() {
             element={<SingleCategories />}
           ></Route>
           <Route path="recipe/:recipeId" element={<SingleRecipe />} />
-          <Route path="search" element={<Search />} />
+          <Route path="search" element={<Search />}>
+            <Route path=":searchQuery" element={<SingleArea />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </ContentWrapper>

@@ -1,12 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FiSearch, FiClock, FiX } from "react-icons/fi";
+import { Outlet, useNavigate } from "react-router-dom";
+import CustomButton from "../components/CustomButton";
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState([]);
   const [showRecent, setShowRecent] = useState(false);
-
-  // Load recent searches from localStorage on component mount
+  const navigate = useNavigate();
+  const outletRef = useRef(null); // Create a ref for the Outlet
+  const countries = [
+    "Indian",
+    "Canadian",
+    "American",
+    "British",
+    "Canadian",
+    "Chinese",
+    "French",
+    "Indian",
+    "Italian",
+    "Japanese",
+    "Mexican",
+    "Spanish",
+    "Turkish",
+  ];
   useEffect(() => {
     const savedSearches = localStorage.getItem("recentSearches");
     if (savedSearches) {
@@ -14,17 +31,34 @@ const Search = () => {
     }
   }, []);
 
-  const handleSearch = (e) => {
+  const fetchByArea = async (query) => {
+    try {
+      const res = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/filter.php?a=${query}`
+      );
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.log("Error :", error);
+    }
+  };
+
+  const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
 
-    // Add to recent searches
+    const data = await fetchByArea(searchQuery);
+    if (data?.meals) {
+      navigate(`${searchQuery}`, {
+        state: data?.meals,
+      });
+    }
     const updatedRecentSearches = [
       searchQuery,
       ...recentSearches.filter(
         (item) => item.toLowerCase() !== searchQuery.toLowerCase()
       ),
-    ].slice(0, 5); // Keep only 5 most recent
+    ].slice(0, 5);
 
     setRecentSearches(updatedRecentSearches);
     localStorage.setItem(
@@ -32,9 +66,13 @@ const Search = () => {
       JSON.stringify(updatedRecentSearches)
     );
 
-    // In a real app, you would navigate to search results or fetch them here
     console.log("Searching for:", searchQuery);
     setSearchQuery("");
+
+    // Scroll to the Outlet after search
+    if (outletRef.current) {
+      outletRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const clearSearch = () => {
@@ -48,11 +86,11 @@ const Search = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      <CustomButton path={"/"}>Back</CustomButton>
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
         Find Your Perfect Recipe
       </h1>
 
-      {/* Search Form */}
       <form onSubmit={handleSearch} className="relative mb-8">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -64,7 +102,7 @@ const Search = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setShowRecent(true)}
             onBlur={() => setTimeout(() => setShowRecent(false), 200)}
-            placeholder="Search for recipes, ingredients, or categories..."
+            placeholder="Search for Region or area....."
             className="block w-full pl-10 pr-12 py-4 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg"
           />
           {searchQuery && (
@@ -78,7 +116,6 @@ const Search = () => {
           )}
         </div>
 
-        {/* Recent Searches Dropdown */}
         {showRecent && recentSearches.length > 0 && (
           <div className="absolute z-10 mt-1 w-full bg-white rounded-lg shadow-lg border border-gray-200">
             <div className="p-2">
@@ -109,17 +146,26 @@ const Search = () => {
         </button>
       </form>
 
-      {/* Search Tips */}
       <div className="bg-blue-50 p-6 rounded-lg">
         <h2 className="text-xl font-semibold text-gray-800 mb-3">
           How to search
         </h2>
-        <ul className="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Search by main ingredient (e.g., "chicken", "salmon")</li>
-          <li>Try meal types (e.g., "breakfast", "dessert")</li>
-          <li>Search by cuisine (e.g., "Italian", "Chinese")</li>
-          <li>Combine terms (e.g., "quick vegetarian dinner")</li>
+        <ul className="flex flex-wrap gap-4 items-baseline space-y-2 text-gray-600">
+          {countries.map((item, i) => {
+            return (
+              <li
+                className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium cursor-pointer hover:bg-orange-300 hover:shadow-orange-200 transition-all duration-300 hover:shadow-lg"
+                onClick={() => setSearchQuery(item)}
+              >
+                {item}
+              </li>
+            );
+          })}
         </ul>
+      </div>
+
+      <div ref={outletRef}>
+        <Outlet />
       </div>
     </div>
   );
