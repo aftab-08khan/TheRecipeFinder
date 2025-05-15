@@ -28,7 +28,7 @@ const SingleCategories = () => {
   }, [categoryId]);
 
   return (
-    <div className="py-4  mx-auto min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+    <div className="py-2 mx-auto min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
       <Header id={categoryId}>
         <CustomButton on path={"/"}>
           Back
@@ -42,7 +42,7 @@ const SingleCategories = () => {
           </div>
         </div>
       ) : meals?.length > 0 ? (
-        <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-12">
+        <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-8 lg:px-20">
           {meals?.length < 0 || meals == [] ? (
             <CardsSkeleton count={8} />
           ) : (

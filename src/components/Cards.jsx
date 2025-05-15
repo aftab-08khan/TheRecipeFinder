@@ -26,7 +26,6 @@ const CardsSkeleton = ({ count = 8 }) => {
 
 const Cards = ({ title, desc, img, id, link, tag }) => {
   const navigate = useNavigate();
-  console.log(link);
   const handleNavigation = () => {
     navigate(link, {
       state: id,

@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Categories from "../components/Categories";
 import "../App.css";
 import CustomButton from "../components/CustomButton";
 import SearchInput from "../components/SearchInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Home = () => {
+  const navigate = useNavigate();
+  const [randomMealData, setRandomMealData] = useState(null);
+  const fetchRandomMeal = async () => {
+    try {
+      const res = await fetch(
+        "https://www.themealdb.com/api/json/v1/1/random.php"
+      );
+
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  useEffect(() => {}, []);
+  const handleNavigation = async () => {
+    const data = await fetchRandomMeal();
+
+    navigate(`/recipe/${data?.meals[0]?.strMeal}`, {
+      state: { data: data?.meals[0] },
+    });
+  };
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 p-8">
       <div className="max-w-6xl mx-auto">
@@ -22,24 +45,27 @@ const Home = () => {
           </p>
 
           <div className="flex flex-wrap gap-4 mt-8 justify-center">
-            {/* <a href="#todays-special">
-              <button className="font-semibold px-6 py-3 rounded-full bg-amber-600 hover:bg-amber-700 text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex items-center gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v10a1 1 0 00.293.707L6 18.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v12.828l2.293 2.293A1 1 0 0018 16V6a1 1 0 00-.293-.707z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Today's Special
-              </button>
-            </a> */}
-            <CustomButton path={"/"}>Today's Special</CustomButton>
+            {/* <a href="#todays-special"> */}
+            <div
+              onClick={handleNavigation}
+              className="font-semibold px-6 py-3 rounded-full bg-amber-600 hover:bg-amber-700 text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex items-center gap-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v10a1 1 0 00.293.707L6 18.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v12.828l2.293 2.293A1 1 0 0018 16V6a1 1 0 00-.293-.707z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Today's Special
+            </div>
+            {/* </a> */}
+            {/* <CustomButton path={"/"}>Today's Special</CustomButton> */}
             <Link to={"/search"}>
               <button className="font-semibold px-6 py-3 rounded-full bg-white hover:bg-gray-50 text-amber-800 border border-amber-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 flex items-center gap-2">
                 <svg
