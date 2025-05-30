@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Cards, CardsSkeleton } from "./Cards";
 import SearchInput from "./SearchInput";
+import Alert from "./Alert";
 
 const Categories = () => {
   const [categoriesData, setCategoriesData] = useState(null);
@@ -14,7 +15,7 @@ const Categories = () => {
       );
       const data = await res.json();
       const filterData = data?.categories?.filter(
-        (item, i) => item?.strCategory.toLowerCase() !== "pork"
+        (item, i) => item?.strCategory?.toLowerCase() !== "pork"
       );
 
       setCategoriesData(filterData);
@@ -32,8 +33,9 @@ const Categories = () => {
     }
 
     const filtered = categoriesData?.filter((item) =>
-      item.strCategory.toLowerCase().includes(val.toLowerCase())
+      item?.strCategory?.toLowerCase().includes(val?.toLowerCase())
     );
+
     setFilteredCategoriesData(filtered);
   };
 
@@ -47,23 +49,27 @@ const Categories = () => {
         value={inputVal}
         placeHolder="Search for Category"
       />
-      <ul className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
-        {categoriesData?.length > 0 ? (
-          filteredCategoriesData?.map((item, i) => {
-            return (
-              <Cards
-                link={`category/${item?.strCategory}`}
-                key={i}
-                title={item?.strCategory}
-                desc={item?.strCategoryDescription}
-                img={item?.strCategoryThumb}
-              />
-            );
-          })
-        ) : (
-          <CardsSkeleton count={8} /> // Render 8 skeleton cards
-        )}
-      </ul>
+      {filteredCategoriesData?.length > 0 ? (
+        <ul className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+          {categoriesData?.length > 0 ? (
+            filteredCategoriesData?.map((item, i) => {
+              return (
+                <Cards
+                  link={`category/${item?.strCategory}`}
+                  key={i}
+                  title={item?.strCategory}
+                  desc={item?.strCategoryDescription}
+                  img={item?.strCategoryThumb}
+                />
+              );
+            })
+          ) : (
+            <CardsSkeleton count={8} /> // Render 8 skeleton cards
+          )}
+        </ul>
+      ) : (
+        <Alert> umm...sorry...No results found!</Alert>
+      )}
     </div>
   );
 };

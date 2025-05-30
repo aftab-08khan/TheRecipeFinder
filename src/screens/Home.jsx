@@ -4,6 +4,8 @@ import "../App.css";
 import CustomButton from "../components/CustomButton";
 import SearchInput from "../components/SearchInput";
 import { Link, useNavigate } from "react-router-dom";
+
+import "../App.css";
 const Home = () => {
   const navigate = useNavigate();
   const [randomMealData, setRandomMealData] = useState(null);
@@ -29,17 +31,30 @@ const Home = () => {
     });
   };
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center py-12 md:py-20">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-amber-900 font-playfair">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 ">
+      <div className="">
+        {/* <header>
+          <img />
+          <nav>
+            <ul>
+              <li>Home</li>
+              <li>Category</li>
+              <li>Ingrident</li>
+              <li></li>
+
+
+            </ul>
+          </nav>
+        </header> */}
+        <div className="text-center md:py-20 background flex flex-col justify-center items-center">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-amber-100 font-playfair">
             Welcome to{" "}
-            <span className="text-amber-600 relative inline-block">
+            <span className="text-amber-500 relative inline-block">
               Recipe Finder
               <span className="absolute -bottom-2 left-0 w-full h-1.5 bg-amber-400 transform origin-left transition-all duration-500 scale-x-0 group-hover:scale-x-100"></span>
             </span>
           </h1>
-          <p className="text-xl md:text-2xl mt-6 text-amber-800 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl mt-6 text-amber-100 max-w-2xl mx-auto">
             Discover delicious meals that will tantalize your taste buds and
             brighten your day!
           </p>
@@ -86,7 +101,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="mt-12 md:mt-20">
+        <div className="mt-12 md:mt-20 mx-auto px-12">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-amber-900 mb-8 font-playfair">
             Browse by Category
           </h2>

@@ -1,10 +1,10 @@
 import React from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Cards } from "../components/Cards";
+import Alert from "../components/Alert";
 
 const SingleArea = () => {
   const { state, pathname } = useLocation();
-  console.log(location);
 
   return (
     <div className=" mt-20">
@@ -14,20 +14,24 @@ const SingleArea = () => {
           {pathname.split("/").pop().toUpperCase()}
         </span>
       </h3>
-      <div className="mt-6 grid grid-cols-1  sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
-        {state?.map((item, i) => {
-          return (
-            <Cards
-              key={i}
-              id={item?.idMeal}
-              link={`/recipe/${item?.idMeal}`}
-              img={item?.strMealThumb}
-              title={item?.strMeal}
-              tag={pathname.split("/").pop()}
-            />
-          );
-        })}
-      </div>
+      {state === null ? (
+        <Alert> umm...sorry...No results found!</Alert>
+      ) : (
+        <div className="mt-6 grid grid-cols-1  sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
+          {state?.map((item, i) => {
+            return (
+              <Cards
+                key={i}
+                id={item?.idMeal}
+                link={`/recipe/${item?.idMeal}`}
+                img={item?.strMealThumb}
+                title={item?.strMeal}
+                tag={pathname.split("/").pop()}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

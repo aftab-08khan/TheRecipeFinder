@@ -7,23 +7,11 @@ const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState([]);
   const [showRecent, setShowRecent] = useState(false);
+  const [data, setData] = useState(null);
   const navigate = useNavigate();
   const outletRef = useRef(null); // Create a ref for the Outlet
-  const countries = [
-    "Indian",
-    "Canadian",
-    "American",
-    "British",
-    "Canadian",
-    "Chinese",
-    "French",
-    "Indian",
-    "Italian",
-    "Japanese",
-    "Mexican",
-    "Spanish",
-    "Turkish",
-  ];
+
+  const [countries, setCountries] = useState(null);
   useEffect(() => {
     const savedSearches = localStorage.getItem("recentSearches");
     if (savedSearches) {
@@ -31,13 +19,29 @@ const Search = () => {
     }
   }, []);
 
-  const fetchByArea = async (query) => {
+  const fetchAllArea = async () => {
     try {
       const res = await fetch(
-        `https://www.themealdb.com/api/json/v1/1/filter.php?a=${query}`
+        "https://www.themealdb.com/api/json/v1/1/list.php?a=list"
+      );
+
+      const data = await res.json();
+      setCountries(data?.meals);
+    } catch (error) {
+      console.log(error, "Error");
+    }
+  };
+  useEffect(() => {
+    fetchAllArea();
+  }, []);
+
+  const fetchByArea = async () => {
+    try {
+      const res = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/filter.php?a=${searchQuery}`
       );
       const data = await res.json();
-      return data;
+      setData(data);
     } catch (error) {
       console.log("Error :", error);
     }
@@ -47,10 +51,9 @@ const Search = () => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
 
-    const data = await fetchByArea(searchQuery);
-    if (data?.meals) {
+    if (data?.meals || data?.meals === null) {
       navigate(`${searchQuery}`, {
-        state: data?.meals,
+        state: data?.meals || null,
       });
     }
     const updatedRecentSearches = [
@@ -66,9 +69,8 @@ const Search = () => {
       JSON.stringify(updatedRecentSearches)
     );
 
-    console.log("Searching for:", searchQuery);
     setSearchQuery("");
-
+    setShowRecent(false);
     // Scroll to the Outlet after search
     if (outletRef.current) {
       outletRef.current.scrollIntoView({ behavior: "smooth" });
@@ -83,7 +85,9 @@ const Search = () => {
     setSearchQuery(search);
     setShowRecent(false);
   };
-
+  useEffect(() => {
+    fetchByArea();
+  }, [searchQuery]);
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <CustomButton path={"/"}>Back</CustomButton>
@@ -151,16 +155,26 @@ const Search = () => {
           How to search
         </h2>
         <ul className="flex flex-wrap gap-4 items-baseline space-y-2 text-gray-600">
-          {countries.map((item, i) => {
-            return (
-              <li
-                className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium cursor-pointer hover:bg-orange-300 hover:shadow-orange-200 transition-all duration-300 hover:shadow-lg"
-                onClick={() => setSearchQuery(item)}
-              >
-                {item}
-              </li>
-            );
-          })}
+          {countries === null
+            ? [1, 2, 3, 4, 5, 6, , 7, 8, 1, 2, 3, 4, 5, 6, , 7, 8].map(
+                (item, i) => (
+                  <li
+                    key={i}
+                    className="h-8 w-20 bg-orange-300 text-orange-800 px-3 py-1 rounded-full shadow-lg animate-pulse"
+                  ></li>
+                )
+              )
+            : countries?.map((item, i) => {
+                return (
+                  <li
+                    key={i}
+                    className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium cursor-pointer hover:bg-orange-300 hover:shadow-orange-200 transition-all duration-300 hover:shadow-lg"
+                    onClick={() => setSearchQuery(item?.strArea)}
+                  >
+                    {item?.strArea}
+                  </li>
+                );
+              })}
         </ul>
       </div>
 
