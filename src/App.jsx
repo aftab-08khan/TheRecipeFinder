@@ -6,6 +6,7 @@ import SingleCategories from "./screens/SingleCategories";
 import SingleRecipe from "./screens/SingleRecipe";
 import Search from "./screens/Search";
 import SingleArea from "./screens/SingleArea";
+import ErrorPage from "./screens/Error";
 
 function App() {
   return (
@@ -13,6 +14,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="*" element={<ErrorPage />} />
+
           <Route
             path="/category/:categoryId"
             element={<SingleCategories />}
