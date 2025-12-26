@@ -238,7 +238,7 @@ const Home = () => {
         transition={{ duration: 0.7 }}
         className="relative py-10"
       >
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-3">
           <Categories />
         </div>
       </motion.section>

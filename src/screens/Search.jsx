@@ -91,7 +91,7 @@ const Search = () => {
   }, [searchQuery]);
 
   return (
-    <div className=" w-full px-32 py-10 bg-gradient-to-br from-amber-50 via-white to-amber-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500">
+    <div className=" w-full px-8 md:px-24 py-10 bg-gradient-to-br from-amber-50 via-white to-amber-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500">
       {/* Back Button */}
       <CustomButton path={"/"}>⬅ Back</CustomButton>
 
