@@ -65,19 +65,22 @@ const Home = () => {
             </div>
 
             {/* Desktop Menu */}
-            <ul className="hidden md:flex items-center space-x-8">
+            <ul className="hidden md:flex dark:text-gray-50 items-center space-x-8">
               <li>
                 <Link to="/" className="nav-link">
                   Home
                 </Link>
               </li>
               <li>
-                <button onClick={handleScroll} className="nav-link">
+                <button
+                  onClick={handleScroll}
+                  className="dark:text-gray-50 nav-link"
+                >
                   Category
                 </button>
               </li>
               <li>
-                <Link to="/ingredient" className="nav-link">
+                <Link to="/ingredient" className="dark:text-gray-50 nav-link">
                   Ingredient
                 </Link>
               </li>
