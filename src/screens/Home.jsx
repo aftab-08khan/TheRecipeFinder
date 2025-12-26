@@ -10,6 +10,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const categoryRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleScroll = () => {
     if (categoryRef.current) {
@@ -54,76 +55,88 @@ const Home = () => {
         <div className="container mx-auto px-6 py-4">
           <nav className="flex items-center justify-between">
             {/* Logo */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 100, delay: 0.3 }}
-              className="flex items-center space-x-2"
-            >
+            <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-lg">🍳</span>
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent dark:from-amber-400 dark:to-orange-400">
+              <span className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
                 RecipeFinder
               </span>
-            </motion.div>
+            </div>
 
-            {/* Nav Links */}
-            <motion.ul
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="flex items-center space-x-8"
-            >
-              <li className="group">
-                <Link
-                  to="/"
-                  className="font-medium text-gray-700 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors duration-300 relative py-2"
-                >
+            {/* Desktop Menu */}
+            <ul className="hidden md:flex items-center space-x-8">
+              <li>
+                <Link to="/" className="nav-link">
                   Home
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-500 group-hover:w-full transition-all duration-300"></span>
                 </Link>
               </li>
-              <li className="group">
-                <div
-                  onClick={handleScroll}
-                  className="font-medium cursor-pointer text-gray-700 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors duration-300 relative py-2"
-                >
+              <li>
+                <button onClick={handleScroll} className="nav-link">
                   Category
-                </div>
+                </button>
               </li>
-              <li className="group">
-                <Link
-                  to="/ingredient"
-                  className="font-medium text-gray-700 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors duration-300 relative py-2"
-                >
+              <li>
+                <Link to="/ingredient" className="nav-link">
                   Ingredient
                 </Link>
               </li>
-            </motion.ul>
+            </ul>
 
-            {/* Theme Toggle */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={toggleTheme}
-              className="relative p-3 rounded-2xl bg-gradient-to-r from-amber-100 to-orange-100 dark:from-gray-800 dark:to-gray-700 text-amber-600 dark:text-amber-400 shadow-lg transition-all duration-300 group"
-            >
-              <div className="flex items-center space-x-2">
-                {theme === "light" ? (
-                  <>
-                    <span className="text-lg">🌙</span>
-                    <span className="text-sm font-medium">Dark</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-lg">☀️</span>
-                    <span className="text-sm font-medium">Light</span>
-                  </>
-                )}
-              </div>
-            </motion.button>
+            {/* Right controls */}
+            <div className="flex items-center gap-3">
+              {/* Theme toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-3 rounded-xl bg-amber-100 dark:bg-gray-800"
+              >
+                {theme === "light" ? "🌙" : "☀️"}
+              </button>
+
+              {/* Mobile Menu Button */}
+              <button
+                className="md:hidden text-3xl dark:text-gray-50"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                {menuOpen ? "✕" : "☰"}
+              </button>
+            </div>
           </nav>
+          {/* Mobile Menu */}
+          {menuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="md:hidden mt-4 rounded-2xl bg-white dark:bg-gray-900 shadow-lg overflow-hidden"
+            >
+              <Link
+                to="/"
+                onClick={() => setMenuOpen(false)}
+                className="block px-6 py-4 dark:text-gray-50 border-b dark:border-gray-700"
+              >
+                Home
+              </Link>
+
+              <button
+                onClick={() => {
+                  handleScroll();
+                  setMenuOpen(false);
+                }}
+                className="w-full text-left px-6 py-4 border-b dark:text-gray-50 dark:border-gray-700"
+              >
+                Category
+              </button>
+
+              <Link
+                to="/ingredient"
+                onClick={() => setMenuOpen(false)}
+                className="block px-6 py-4 dark:text-gray-50"
+              >
+                Ingredient
+              </Link>
+            </motion.div>
+          )}
         </div>
       </motion.header>
 
@@ -146,12 +159,7 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-amber-600 via-orange-600 to-amber-600 dark:from-amber-400 dark:via-orange-400 dark:to-amber-400 bg-clip-text text-transparent font-playfair leading-tight"
             >
-              Savor Every{" "}
-              <span className="relative inline-block mx-2">
-                <span className="relative z-10">Bite</span>
-                <div className="absolute bottom-2 left-0 w-full h-3 bg-amber-400/20 dark:bg-amber-400/30 -rotate-1"></div>
-              </span>
-              with Recipe Finder
+              Savor Every Bite with Recipe Finder
             </motion.h1>
 
             <motion.p
